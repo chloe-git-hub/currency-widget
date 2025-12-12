@@ -1,40 +1,33 @@
-// index.js - widget logic
-ZOHO.embeddedApp.init();
+// index.js - simple widget logic
+ZOHO.embeddedApp.init().then(() => {
+    const currencyEl = document.getElementById('currency');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const msgEl = document.getElementById('message');
 
-const currencyEl = document.getElementById('currency');
-const confirmBtn = document.getElementById('confirmBtn');
-const subjectEl = document.getElementById('subject');
-const msgEl = document.getElementById('message');
+    confirmBtn.addEventListener('click', async function() {
+        msgEl.textContent = "";
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Opening...";
 
-confirmBtn.addEventListener('click', async function() {
-  msgEl.textContent = "";
-  confirmBtn.disabled = true;
-  confirmBtn.textContent = "Creating...";
+        const currency = currencyEl.value || "SGD"; // default to SGD if nothing selected
 
-  const currency = currencyEl.value;
-  const subject = subjectEl.value || "Draft - Currency confirmed";
+        try {
+            // Open new Quote form prefilled with selected currency
+            await ZOHO.CRM.UI.Record.create({
+                Entity: "Quotes",
+                prefill: {
+                    "Currency": currency
+                }
+            });
 
-  try {
-    // Pre-fill fields for new Quote
-    const prefillData = {
-      "Subject": subject,
-      "Currency": currency
-      // Add any other default fields if needed
-    };
+            // Close the widget automatically
+            ZOHO.embeddedApp.close();
 
-    // Open the new Quote creation form prefilled
-    await ZOHO.CRM.UI.Record.create({
-      Entity: "Quotes",
-      prefill: prefillData
+        } catch (err) {
+            console.error(err);
+            msgEl.textContent = "Error opening Quote form: " + (err.message || JSON.stringify(err));
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = "Confirm";
+        }
     });
-
-    // Close the widget after opening the form
-    ZOHO.embeddedApp.close();
-
-  } catch (err) {
-    console.error(err);
-    msgEl.textContent = "Error opening Quote form: " + (err.message || JSON.stringify(err));
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = "Confirm & Create Quote";
-  }
 });
