@@ -1,1 +1,12 @@
+{
+  "platform-version": "2.0",
+  "app": {
+    "urls": {
+      "/": {
+        "component": "https://chloe-git-hub.github.io/currency-widget/index.html"
+      }
+    }
+  }
+}
+
 
