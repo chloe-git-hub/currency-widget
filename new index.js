@@ -1,10 +1,12 @@
 window.onload = function () {
-    alert("Window loaded");
-
     ZOHO.embeddedApp.init().then(() => {
-        alert("SDK INITIALIZED");
-    }).catch(e => {
-        alert("SDK FAILED");
-        console.error(e);
+
+        alert("SDK INIT OK");
+
+        document.getElementById("confirmBtn").onclick = function () {
+            alert("BUTTON CLICKED");
+        };
+
     });
 };
+
