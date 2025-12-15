@@ -1,7 +1,3 @@
-confirmBtn.onclick = function () {
-    alert("BUTTON CLICKED");
-};
-
 window.onload = function () {
     alert("Window loaded");
 
@@ -12,5 +8,6 @@ window.onload = function () {
         console.error(e);
     });
 };
+
 
 
